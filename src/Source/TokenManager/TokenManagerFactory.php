@@ -5,6 +5,7 @@ namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager;
 use Exception;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\MissingConfigurationException;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\UnsupportedTokenManagerException;
+use FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager\Plugins\TokenManagerLexik;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TokenManagerFactory implements TokenManagerFactoryInterface

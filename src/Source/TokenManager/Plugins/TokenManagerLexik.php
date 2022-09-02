@@ -1,6 +1,8 @@
 <?php
 
-namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager;
+namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager\Plugins;
+
+use FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager\TokenManagerInterface;
 
 class TokenManagerLexik implements TokenManagerInterface
 {
