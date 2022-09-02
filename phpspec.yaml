@@ -1,0 +1,7 @@
+suites:
+  bundle_suite:
+    namespace: FK\Bundle\AttributeAuthorizationBundle\
+    psr4_prefix: FK\Bundle\AttributeAuthorizationBundle\
+    spec_path: tests
+
+formatter.name: pretty
