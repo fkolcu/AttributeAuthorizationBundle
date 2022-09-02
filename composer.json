@@ -1,0 +1,20 @@
+{
+    "name": "furkan/attribute-authorization-bundle",
+    "description": "This bundle provides attribute to authorize user on class or method level",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "FK\\Bundle\\AttributeAuthorizationBundle\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Furkan",
+            "email": "hello@furkankolcu.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0"
+    }
+}
