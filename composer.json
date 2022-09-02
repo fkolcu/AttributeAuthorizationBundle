@@ -1,5 +1,5 @@
 {
-  "name": "furkan/attribute-authorization-bundle",
+  "name": "fkolcu/attribute-authorization-bundle",
   "description": "This bundle provides attribute to authorize user on class or method level",
   "type": "symfony-bundle",
   "license": "MIT",
