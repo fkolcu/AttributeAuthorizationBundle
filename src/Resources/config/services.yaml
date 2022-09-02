@@ -5,3 +5,9 @@ services:
 
   FK\Bundle\AttributeAuthorizationBundle\Source:
     resource: '../../Source'
+
+  fk_attribute_authorization_bundle:
+    authorization_subscriber:
+      class: FK\Bundle\AttributeAuthorizationBundle\EventSubscriber\AuthorizationSubscriber
+      tags:
+        - { name: kernel.event_subscriber }
