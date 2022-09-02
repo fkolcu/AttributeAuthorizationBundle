@@ -15,6 +15,7 @@
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^8.0",
+        "symfony/http-kernel": "^6.1"
     }
 }
