@@ -6,6 +6,7 @@ use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\AttributeReaderInter
 use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\Authorize;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\AuthorizationFailedException;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\AuthorizationRequiredException;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\InsufficientPermissionException;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\MissingConfigurationException;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\UnsupportedTokenManagerException;
 use FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager\TokenManagerServiceInterface;
@@ -51,17 +52,21 @@ class AuthorizationSubscriber implements EventSubscriberInterface
      * @throws MissingConfigurationException
      * @throws UnsupportedTokenManagerException
      * @throws AuthorizationFailedException
+     * @throws InsufficientPermissionException
      */
     public function onKernelController(ControllerEvent $event): void
     {
         $controllerClassName = get_class($event->getController()[0]);
         $methodName = $event->getController()[1];
 
-        $methodHasAuthAttribute = $this->attributeReader->has(Authorize::class, $controllerClassName, $methodName);
-        $classHasAuthAttribute = $this->attributeReader->has(Authorize::class, $controllerClassName);
-        if (!$classHasAuthAttribute && !$methodHasAuthAttribute) {
+        $methodAttribute = $this->attributeReader->has(Authorize::class, $controllerClassName, $methodName);
+        $classAttribute = $this->attributeReader->has(Authorize::class, $controllerClassName);
+        if (!$classAttribute && !$methodAttribute) {
             return;
         }
+
+        /** @var Authorize $attribute */
+        $attribute = $methodAttribute ?? $classAttribute;
 
         $request = $event->getRequest();
 
@@ -73,6 +78,10 @@ class AuthorizationSubscriber implements EventSubscriberInterface
         $user = $this->tokenManagerService->resolveToken($token);
         if (is_null($user)) {
             throw new AuthorizationFailedException();
+        }
+
+        if (!$user->hasAnyRoleIn($attribute->getRoles())) {
+            throw new InsufficientPermissionException();
         }
 
         $event->getRequest()->attributes->set('authorizedUser', $user);

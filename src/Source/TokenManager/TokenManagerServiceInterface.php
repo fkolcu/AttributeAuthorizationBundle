@@ -5,8 +5,8 @@ namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager;
 use Exception;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\MissingConfigurationException;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\UnsupportedTokenManagerException;
+use FK\Bundle\AttributeAuthorizationBundle\Source\User;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 interface TokenManagerServiceInterface
 {
@@ -22,10 +22,10 @@ interface TokenManagerServiceInterface
      * Resolves JWT token and tries to extract user
      *
      * @param string $token
-     * @return UserInterface|null
+     * @return User|null
      * @throws MissingConfigurationException
      * @throws UnsupportedTokenManagerException
      * @throws Exception
      */
-    public function resolveToken(string $token): ?UserInterface;
+    public function resolveToken(string $token): ?User;
 }

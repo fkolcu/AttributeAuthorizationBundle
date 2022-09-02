@@ -38,4 +38,15 @@ class User implements UserInterface
     {
         // Do nothing
     }
+
+    public function hasAnyRoleIn(array $expectedRoles): bool
+    {
+        foreach ($expectedRoles as $expectedRole) {
+            if (in_array($expectedRole, $this->roles)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager\Plugins;
+namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager;
 
-use FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager\TokenManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 
 class TokenManagerLexik implements TokenManagerInterface

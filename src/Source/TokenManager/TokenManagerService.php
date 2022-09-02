@@ -4,16 +4,15 @@ namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager;
 
 use Symfony\Component\HttpFoundation\Request;
 use FK\Bundle\AttributeAuthorizationBundle\Source\User;
-use Symfony\Component\Security\Core\User\UserInterface;
 use FK\Bundle\AttributeAuthorizationBundle\AttributeAuthorizationBundle;
 
 class TokenManagerService implements TokenManagerServiceInterface
 {
-    private TokenManagerFactoryInterface $tokenManagerFactory;
+    private TokenManagerInterface $tokenManager;
 
-    public function __construct(TokenManagerFactoryInterface $tokenManagerFactory)
+    public function __construct(TokenManagerInterface $tokenManager)
     {
-        $this->tokenManagerFactory = $tokenManagerFactory;
+        $this->tokenManager = $tokenManager;
     }
 
     /**
@@ -28,10 +27,9 @@ class TokenManagerService implements TokenManagerServiceInterface
     /**
      * @inheritDoc
      */
-    public function resolveToken(string $token): ?UserInterface
+    public function resolveToken(string $token): ?User
     {
-        $tokenManager = $this->tokenManagerFactory->getTokenManager();
-        $decodedTokenData = $tokenManager->decode($token);
+        $decodedTokenData = $this->tokenManager->decode($token);
 
         $identifier = $decodedTokenData['identifier'] ?? null;
         if (is_null($identifier)) {

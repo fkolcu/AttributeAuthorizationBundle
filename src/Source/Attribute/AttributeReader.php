@@ -11,12 +11,12 @@ class AttributeReader implements AttributeReaderInterface
     /**
      * @inheritDoc
      */
-    public function has(string $attributeClassName, string $sourceClassName, string $sourceMethodName = null): bool
+    public function has(string $attributeClassName, string $sourceClassName, string $sourceMethodName = null): object|false
     {
         $attributes = $this->getAttributes($sourceClassName, $sourceMethodName);
         foreach ($attributes as $attribute) {
             if ($attribute->getName() === $attributeClassName) {
-                return true;
+                return $attribute->newInstance();
             }
         }
 
