@@ -2,7 +2,6 @@
 
 namespace FK\Bundle\AttributeAuthorizationBundle\DependencyInjection;
 
-use FK\Bundle\AttributeAuthorizationBundle\AttributeAuthorizationBundle;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,7 +12,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder(AttributeAuthorizationBundle::BUNDLE_SERVICE_PREFIX);
+        $treeBuilder = new TreeBuilder('attribute_authorization');
 
         $treeBuilder->getRootNode()
             ->children()

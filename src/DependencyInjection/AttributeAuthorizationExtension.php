@@ -3,7 +3,6 @@
 namespace FK\Bundle\AttributeAuthorizationBundle\DependencyInjection;
 
 use Exception;
-use FK\Bundle\AttributeAuthorizationBundle\AttributeAuthorizationBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -21,8 +20,7 @@ class AttributeAuthorizationExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        foreach ($config as $key => $value) {
-            $container->setParameter(AttributeAuthorizationBundle::BUNDLE_SERVICE_PREFIX . '.' . $key, $value);
-        }
+
+        $container->setParameter("attribute_authorization.token_manager", $config['token_manager']);
     }
 }
