@@ -21,6 +21,8 @@ class AttributeAuthorizationExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter("attribute_authorization.token_manager", $config['token_manager']);
+        if (isset($config['token_manager'])) {
+            $container->setParameter("attribute_authorization.token_manager", $config['token_manager']);
+        }
     }
 }
