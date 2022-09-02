@@ -16,4 +16,10 @@ class TestWithoutAttributeClass
     {
         # Only user
     }
+
+    #[Authorize('ROLE_MANAGER', 'ROLE_ADMIN')]
+    public function methodAuthorizeAdminManager(): void
+    {
+        # Only admin and manager
+    }
 }
