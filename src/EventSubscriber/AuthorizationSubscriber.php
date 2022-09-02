@@ -4,18 +4,32 @@ namespace FK\Bundle\AttributeAuthorizationBundle\EventSubscriber;
 
 use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\AttributeReaderInterface;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\Authorize;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\AuthorizationFailedException;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\AuthorizationRequiredException;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\MissingConfigurationException;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\UnsupportedTokenManagerException;
+use FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager\TokenManagerServiceInterface;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Validation\JWTTokenValidationInterface;
+use ReflectionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthorizationSubscriber implements EventSubscriberInterface
 {
     private AttributeReaderInterface $attributeReader;
+    private JWTTokenValidationInterface $JWTTokenValidation;
+    private TokenManagerServiceInterface $tokenManagerService;
 
-    public function __construct(AttributeReaderInterface $attributeReader)
+    public function __construct(
+        AttributeReaderInterface     $attributeReader,
+        JWTTokenValidationInterface  $JWTTokenValidation,
+        TokenManagerServiceInterface $tokenManagerService
+    )
     {
         $this->attributeReader = $attributeReader;
+        $this->JWTTokenValidation = $JWTTokenValidation;
+        $this->tokenManagerService = $tokenManagerService;
     }
 
     /**
@@ -30,6 +44,14 @@ class AuthorizationSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param ControllerEvent $event
+     * @throws AuthorizationRequiredException
+     * @throws ReflectionException
+     * @throws MissingConfigurationException
+     * @throws UnsupportedTokenManagerException
+     * @throws AuthorizationFailedException
+     */
     public function onKernelController(ControllerEvent $event): void
     {
         $controllerClassName = get_class($event->getController()[0]);
@@ -41,10 +63,18 @@ class AuthorizationSubscriber implements EventSubscriberInterface
             return;
         }
 
-        # TODO: validate token here
+        $request = $event->getRequest();
 
-        /** @var UserInterface|null $user */
-        $user = null;
+        if (!$this->JWTTokenValidation->supports($request)) {
+            throw new AuthorizationRequiredException();
+        }
+
+        $token = $this->tokenManagerService->obtainToken($request);
+        $user = $this->tokenManagerService->resolveToken($token);
+        if (is_null($user)) {
+            throw new AuthorizationFailedException();
+        }
+
         $event->getRequest()->attributes->set('authorizedUser', $user);
     }
 }
