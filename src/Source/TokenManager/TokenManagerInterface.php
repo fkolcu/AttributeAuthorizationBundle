@@ -2,7 +2,7 @@
 
 namespace FK\Bundle\AttributeAuthorizationBundle\Source\TokenManager;
 
-use Exception;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\InvalidTokenException;
 
 interface TokenManagerInterface
 {
@@ -11,7 +11,7 @@ interface TokenManagerInterface
      *
      * @param string $token
      * @return array
-     * @throws Exception when decoding failed
+     * @throws InvalidTokenException when decoding failed
      */
     public function decode(string $token): array;
 }
