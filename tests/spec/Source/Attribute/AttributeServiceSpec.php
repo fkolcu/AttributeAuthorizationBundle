@@ -27,42 +27,42 @@ class AttributeServiceSpec extends ObjectBehavior
 
     function it_should_get_attribute_of_authorize_for_controller(AttributeReaderInterface $attributeReader, Authorize $authorize)
     {
-        $attributeReader->has('AuthorizeClass', 'SourceClass', 'method')
+        $attributeReader->has('AuthorizeClass', 'ClassWithAttribute', 'method')
             ->shouldBeCalledOnce()
             ->willReturn(false);
 
-        $attributeReader->has('AuthorizeClass', 'SourceClass')
+        $attributeReader->has('AuthorizeClass', 'ClassWithAttribute')
             ->shouldBeCalledOnce()
             ->willReturn($authorize);
 
-        $result = $this->getAttribute('AuthorizeClass', 'SourceClass', 'method');
+        $result = $this->getAttribute('AuthorizeClass', 'ClassWithAttribute', 'method');
         $result->shouldHaveType(Authorize::class);
     }
 
     function it_should_get_attribute_of_authorize_for_method(AttributeReaderInterface $attributeReader, Authorize $authorize)
     {
-        $attributeReader->has('AuthorizeClass', 'TestWithoutAttributeClass', 'methodAuthorizeAdmin')
+        $attributeReader->has('AuthorizeClass', 'ClassWithoutAttribute', 'methodAuthorizeAdmin')
             ->shouldBeCalledOnce()
             ->willReturn($authorize);
 
-        $attributeReader->has('AuthorizeClass', 'TestWithoutAttributeClass')
+        $attributeReader->has('AuthorizeClass', 'ClassWithoutAttribute')
             ->shouldNotBeCalled();
 
-        $result = $this->getAttribute('AuthorizeClass', 'TestWithoutAttributeClass', 'methodAuthorizeAdmin');
+        $result = $this->getAttribute('AuthorizeClass', 'ClassWithoutAttribute', 'methodAuthorizeAdmin');
         $result->shouldHaveType(Authorize::class);
     }
 
     function it_should_return_false_when_no_attribute_found_for_neither_class_nor_method(AttributeReaderInterface $attributeReader)
     {
-        $attributeReader->has('AuthorizeClass', 'TestWithoutAttributeClass', 'methodNormal')
+        $attributeReader->has('AuthorizeClass', 'ClassWithoutAttribute', 'methodNormal')
             ->shouldBeCalledOnce()
             ->willReturn(false);
 
-        $attributeReader->has('AuthorizeClass', 'TestWithoutAttributeClass')
+        $attributeReader->has('AuthorizeClass', 'ClassWithoutAttribute')
             ->shouldBeCalledOnce()
             ->willReturn(false);
 
-        $result = $this->getAttribute('AuthorizeClass', 'TestWithoutAttributeClass', 'methodNormal');
+        $result = $this->getAttribute('AuthorizeClass', 'ClassWithoutAttribute', 'methodNormal');
         $result->shouldBeBoolean();
         $result->shouldBe(false);
     }

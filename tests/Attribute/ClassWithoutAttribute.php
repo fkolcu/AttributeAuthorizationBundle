@@ -4,7 +4,7 @@ namespace FK\Bundle\AttributeAuthorizationBundle\Tests\Attribute;
 
 use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\Authorize;
 
-class TestWithoutAttributeClass
+class ClassWithoutAttribute
 {
     public function methodNormal(): void
     {
