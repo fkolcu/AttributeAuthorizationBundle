@@ -16,7 +16,9 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-            ->scalarNode('token_manager')->end()
+                ->scalarNode('token_manager')
+                ->defaultValue('LexikJWTAuthenticationBundle')
+                ->end()
             ->end();
 
         return $treeBuilder;
