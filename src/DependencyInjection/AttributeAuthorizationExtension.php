@@ -17,12 +17,5 @@ class AttributeAuthorizationExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
-
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-
-        if (isset($config['token_manager'])) {
-            $container->setParameter("attribute_authorization.token_manager", $config['token_manager']);
-        }
     }
 }
