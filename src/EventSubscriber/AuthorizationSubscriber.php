@@ -2,7 +2,7 @@
 
 namespace FK\Bundle\AttributeAuthorizationBundle\EventSubscriber;
 
-use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\AttributeReaderInterface;
+use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\AttributeServiceInterface;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Attribute\Authorize;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\AuthorizationFailedException;
 use FK\Bundle\AttributeAuthorizationBundle\Source\Exceptions\AuthorizationRequiredException;
@@ -18,19 +18,19 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class AuthorizationSubscriber implements EventSubscriberInterface
 {
-    private AttributeReaderInterface $attributeReader;
     private JWTTokenValidationInterface $JWTTokenValidation;
     private TokenManagerServiceInterface $tokenManagerService;
+    private AttributeServiceInterface $attributeService;
 
     public function __construct(
-        AttributeReaderInterface     $attributeReader,
         JWTTokenValidationInterface  $JWTTokenValidation,
-        TokenManagerServiceInterface $tokenManagerService
+        TokenManagerServiceInterface $tokenManagerService,
+        AttributeServiceInterface    $attributeService
     )
     {
-        $this->attributeReader = $attributeReader;
         $this->JWTTokenValidation = $JWTTokenValidation;
         $this->tokenManagerService = $tokenManagerService;
+        $this->attributeService = $attributeService;
     }
 
     /**
@@ -56,17 +56,11 @@ class AuthorizationSubscriber implements EventSubscriberInterface
      */
     public function onKernelController(ControllerEvent $event): void
     {
-        $controllerClassName = get_class($event->getController()[0]);
+        $controllerClass = get_class($event->getController()[0]);
         $methodName = $event->getController()[1];
 
-        $methodAttribute = $this->attributeReader->has(Authorize::class, $controllerClassName, $methodName);
-        $classAttribute = $this->attributeReader->has(Authorize::class, $controllerClassName);
-        if (!$classAttribute && !$methodAttribute) {
-            return;
-        }
-
         /** @var Authorize $attribute */
-        $attribute = $methodAttribute ?? $classAttribute;
+        $attribute = $this->attributeService->getAttribute(Authorize::class, $controllerClass, $methodName);
 
         $request = $event->getRequest();
 

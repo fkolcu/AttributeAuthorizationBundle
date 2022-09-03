@@ -17,4 +17,10 @@ class TestWithAttributeClass
     {
         # Only ROLE_USER
     }
+
+    #[Authorize('ROLE_ADMIN')]
+    public function methodAuthorizeAdmin(): void
+    {
+        # Only ROLE_ADMIN
+    }
 }
