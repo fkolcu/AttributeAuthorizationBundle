@@ -18,7 +18,7 @@ Documentation
 
 Contributing
 ------------
-See [contributing guide]().
+See [contributing guide](CONTRIBUTING.md).
 
 License
 -------
