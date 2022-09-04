@@ -67,4 +67,17 @@ class AttributeReaderSpec extends ObjectBehavior
         $result->getRoles()->shouldHaveKeyWithValue(0, 'ROLE_MANAGER');
         $result->getRoles()->shouldHaveKeyWithValue(1, 'ROLE_ADMIN');
     }
+
+    function it_should_prioritize_methods_attribute()
+    {
+        # Class of ClassWithAttribute has role of `ROLE_USER`
+        # Method of methodAuthorizeAdmin has role of `ROLE_ADMIN`
+        # Result must be having only `ROLE_ADMIN`
+
+        $result = $this->has(Authorize::class, ClassWithAttribute::class, 'methodAuthorizeAdmin');
+        $result->shouldHaveType(Authorize::class);
+        $result->getRoles()->shouldBeArray();
+        $result->getRoles()->shouldHaveCount(1);
+        $result->getRoles()->shouldHaveKeyWithValue(0, 'ROLE_ADMIN');
+    }
 }
