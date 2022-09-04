@@ -82,7 +82,7 @@ Usage
 use use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class Post
+class PostController
 {
     public function commentPost(Request $request)
     {
